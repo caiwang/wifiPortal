@@ -1,0 +1,13 @@
+1. install the same version Ubuntu as the target ARM system.
+
+2. install arm compiler
+sudo apt-get install gcc-arm-linux-gnueabi
+
+Verify if install is successful：arm-linux-gnueabi-gcc -v  
+
+3. cd opencv/opencv-2.4.9/build_arm/
+4. export JAVA_HOME=/usr/lib/jvm/java-6-sun
+5. cmake -DBUILD_SHARED_LIBS=OFF -DSOFTFP=ON  -DCMAKE_TOOLCHAIN_FILE=../platforms/linux/arm-gnueabi.toolchain.cmake ..
+6. sudo apt-get install g++-arm-linux-gnueabi
+7. cmake -DBUILD_SHARED_LIBS=OFF -DSOFTFP=ON  -DCMAKE_TOOLCHAIN_FILE=../platforms/linux/arm-gnueabi.toolchain.cmake ..
+8. make -j8 

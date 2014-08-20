@@ -1,0 +1,33 @@
+1. Install Java
+======================
+1)  from linux shell, run 'sudo apt-get install openjdk-7-jre-headless'.
+2)  set JAVA_HOME to /etc/alternatives/java.
+3)  java called from /usr/bin/, and it is soft-linked to /etc/alternatvies/java, which is JAVA-HOME above.
+4)  Actual java packages reside at /usr/lib/jvm/java-7-openjdk-i386.
+
+2. Install & configure Jboss.
+============================
+1)  run 'wget http://download.jboss.org/jbossas/7.1/jboss-as-7.1.0.Final/jboss-as-7.1.0.Final.tar.gz'
+2)  run 'tar -xvvzf jboss-as-7.1.0.Final.tar.gz'.
+3)  run 'sudo mkdir /usr/share/jboss'.
+4)  run 'sudo cp -r jboss-as-7.1.0.Final /usr/share/jboss/'.
+5)  run 'cd /usr/share/jboss/'.
+6)  run 'ln -s jboss-as-7.1.0.Final jboss-current' to make a soft-link
+7)  run 'adduser --system --no-create-home --disabled-password --disabled-login --group jboss' to add an user for jboss.
+8)  run 'cd /usr/share/'.
+9)  run 'chown -R jboss:jboss jboss/'.
+10)  get jboss script, and put it in /etc/init.d/. In the script you will see that:
+jboss home set: JBOSS_HOME=/usr/share/jboss/jboss-current
+jboss processor runs in the background. see '&' for start and stop commands.
+11)  run 'chmod +x /etc/init.d/jboss' to have it executable.
+12)  run 'update-rc.d jboss defaults' for jboss run-level settings.
+13)  from jboss home, /usr/share/jboss/jboss-current, run followings.
+
+	sudo chown -R jboss:jboss standalone
+	sudo chmod -R 755 standalone
+14)  For testing box only:
+     modify standalone.xml at /usr/share/jboss/jboss-current/standalone/configuration
+	change 127.0.0.1 to 0.0.0.0 for jboss.bind.address.management
+	change 127.0.0.1 to 0.0.0.0 for jboss.bind.address
+     
+
