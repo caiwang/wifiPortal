@@ -1,0 +1,13 @@
+#script to create video database in mysql
+
+create database video;
+
+use video;
+drop table video;
+create table video(
+  id BIGINT(20) not null auto_increment, 
+  name varchar(128) not null, 
+  url varchar(250) not null, 
+  duration BIGINT(20),
+  primary key(id)
+);

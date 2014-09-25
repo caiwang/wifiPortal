@@ -1,0 +1,2 @@
+http://stackoverflow.com/questions/24801591/add-interceptor-to-spring-boot-mongodb-rest-example
+

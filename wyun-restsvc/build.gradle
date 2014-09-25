@@ -1,0 +1,71 @@
+buildscript {
+	ext {
+		springBootVersion = '1.1.6.RELEASE'
+	}
+    repositories {
+        maven { url "http://repo.spring.io/libs-snapshot" }
+        mavenLocal()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+compileJava.options.encoding = 'UTF-8'
+
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+apply plugin: 'war'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+
+war {
+     manifest {
+        attributes 'Main-Class': 'net.wyun.rest.wlsp.Application'
+    }
+    baseName = 'WYunRest'
+    version =  '0.1.0'
+}
+
+
+repositories {
+    mavenCentral()
+    maven { url "http://repo.spring.io/libs-snapshot" }
+    maven { url "http://maven.springframework.org/milestone" }
+}
+
+configurations {
+  providedRuntime
+}
+
+
+dependencies {
+
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+
+    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-aop:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+    compile("org.springframework.data:spring-data-rest-webmvc")
+    compile("ch.qos.logback:logback-access:1.1.2")
+    
+    
+    compile("mysql:mysql-connector-java")
+    
+    
+    compile("com.google.guava:guava:17.0")
+    compile("com.squareup.retrofit:retrofit:1.6.1")
+    compile("com.squareup.retrofit:converter-jackson:1.6.1")
+    compile("commons-io:commons-io:2.4")
+    
+    testCompile("junit:junit")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.0'
+}
