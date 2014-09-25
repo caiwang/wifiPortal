@@ -16,6 +16,8 @@ II. For dev.
 
 ==============================================
 III. For set up the service for Spring Boot
+     service wyun_svc start to start server
+     service wyun_svc stop to stop server
 ==============================================
 
 1. copy the war file to /home/wlsp/wlsp on the server
