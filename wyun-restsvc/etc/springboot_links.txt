@@ -1,2 +1,6 @@
-http://stackoverflow.com/questions/24801591/add-interceptor-to-spring-boot-mongodb-rest-example
+1 http://stackoverflow.com/questions/24801591/add-interceptor-to-spring-boot-mongodb-rest-example
+
+2. set up https for spring boot
+http://thoughtfulsoftware.wordpress.com/2014/01/05/setting-up-https-for-spring-boot/comment-page-1/
+
 
