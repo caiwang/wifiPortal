@@ -1,0 +1,21 @@
+# See http://docs.spring.io/spring-boot/docs/1.1.4.RELEASE/reference/htmlsingle/#boot-features-external-config-profile-specific-properties
+# for more details about creating profile-specific property files
+
+# See http://docs.spring.io/spring-boot/docs/1.1.4.RELEASE/reference/htmlsingle/#howto-initialize-a-database-using-jpa
+# for more details and options on initializing a production database
+spring.jpa.generate-ddl=true
+spring.jpa.hibernate.ddl-auto=validate
+
+# Replace with your connection string: 182.92.195.40
+spring.datasource.url=jdbc:mysql://192.168.39.136:3306/wlsp?useUnicode=yes&characterEncoding=UTF-8
+
+# Replace with your credentials
+spring.datasource.username=wlsp
+spring.datasource.password=qhd_0ffs4t!
+
+spring.datasource.testOnBorrow=true
+spring.datasource.validationQuery=SELECT 1
+
+spring.datasource.driverClassName=com.mysql.jdbc.Driver
+
+# LOGGING
