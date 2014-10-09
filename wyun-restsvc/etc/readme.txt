@@ -22,6 +22,7 @@ III. For set up the service for Spring Boot
 
 1. copy the war file to /home/wlsp/wlsp on the server
 2. copy the wyun_svc.sh to /home/wlsp/wlsp on the server
+   wyun_svc.sh should be an excutable file, if not, "chmod +x wyun_svc.sh"
 3.  cd /etc/init.d
     sudo ln -s /home/wlsp/wlsp/wyun_svc.sh wyun_svc
     sudo update-rc.d wyun_svc defaults
