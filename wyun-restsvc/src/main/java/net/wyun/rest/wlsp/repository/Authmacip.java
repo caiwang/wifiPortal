@@ -63,6 +63,15 @@ public class Authmacip {
 		this.called = called;
 	}
 
+	public int getSrcid() {
+		return srcid;
+	}
+
+	public void setSrcid(int srcid) {
+		this.srcid = srcid;
+	}
+
+
 
 	public String getSrcip() {
 		return srcip;
@@ -168,21 +177,23 @@ public class Authmacip {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	private String mac;
+	private String mac;  //client mac
 	
-	private String ip;
+	private String ip;  //client ip
 	
-	private String called;
+	private String called;  //hotspot id
 	
 	private String srcip;
 	
-	private String procid;
+	private int srcid;  //wireless ap's ip
 	
-	private String userurl;
+	private String procid;  //portal page id
 	
-	private String orgurl;
+	private String userurl;  //用户访问的目的url
 	
-	private int token;
+	private String orgurl;  //hotspot推送的url
+	
+	private int token;  //session token
 	
 	private Date rectime;
 	
@@ -192,7 +203,7 @@ public class Authmacip {
 	
 	private String progid;
 	
-	private Date optime;
+	private Date optime;  //在iserver上的记录时间
 	
 	
 	public String toString(){
