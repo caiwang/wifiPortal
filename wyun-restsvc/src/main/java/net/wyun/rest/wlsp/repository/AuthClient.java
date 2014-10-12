@@ -242,6 +242,14 @@ public class AuthClient {
 		this.optflag = optflag;
 	}
 
+	
+	public int getSrcid() {
+		return srcid;
+	}
+
+	public void setSrcid(int srcid) {
+		this.srcid = srcid;
+	}
 
 	public String getSrcip() {
 		return srcip;
@@ -346,6 +354,8 @@ public class AuthClient {
 	private Date mantime;
 	
 	private byte optflag;
+	private int srcid;
+
 	private String srcip; //注册时所连接的ihost ip
 	private String srcname; //注册时所连接的ihost name
 	
