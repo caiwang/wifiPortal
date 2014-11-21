@@ -1,11 +1,11 @@
 confluence和jira有很多有用的插件，但是使用了license的验证机制，需要破解。
 atlassian-universal-plugin-manager-plugin是atlassian所有产品的插件管理包，所以需要反编译这个包，进行修改。
 分步指南
-在eclipse中新建confluence项目
-解压atlassian-universal-plugin-manager-plugin-2.15.2.jar到confluece目录的classes目录下
-用jad反编译所有classes文件
+1. 在eclipse中新建confluence项目
+2. 解压atlassian-universal-plugin-manager-plugin-2.15.2.jar到confluece目录的classes目录下
+3. 用jad反编译所有classes文件
 jad.exe -r -ff -d src -s java classes/**/*.class
-找到com/atlassian/extras/decoder/v2/Version2LicenseDecoder.java文件，按如下修改
+4. 找到com/atlassian/extras/decoder/v2/Version2LicenseDecoder.java文件，按如下修改
 public boolean canDecode2(String licenseString)
     {
         int pos;
@@ -64,8 +64,8 @@ public boolean canDecode2(String licenseString)
         System.out.println("result:" + result);
         return result;
     }
-将编译好的class文件，放入原jar包，上传服务器，并重启
-安装所需插件，用免费试用方式，然后到后台查看日志中的result，并按如下修改：
+5. 将编译好的class文件，放入原jar包，上传服务器，并重启
+6. 安装所需插件，用免费试用方式，然后到后台查看日志中的result，并按如下修改：
 Description=Polls for Confluence: COMMERCIAL,
 NumberOfUsers=-1,
 CreationDate=2014-09-30,
@@ -79,4 +79,4 @@ LicenseExpiryDate=2099-10-30,
 com.simplenia.confluence.plugins.polls.enterprise=true,
 LicenseTypeName=COMMERCIAL,
 PurchaseDate=2014-09-30
-回到插件管理界面，更新license，显示更新成功即可
+7.回到插件管理界面，更新license，显示更新成功即可
