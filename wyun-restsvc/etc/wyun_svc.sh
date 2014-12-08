@@ -3,7 +3,7 @@
 echo "Service [$APP_NAME] - [$1]"
 
 export APP_HOME=/home/wlsp/wlsp
-export APP_NAME=WYunRest-0.1.0
+export APP_NAME=WYunRest
 export APP_PORT=8080
 
 echo "    JAVA_HOME=$JAVA_HOME"
@@ -18,9 +18,7 @@ function start {
         exit 1
     fi
     echo "Starting application..."
-    nohup java -jar $APP_HOME/$APP_NAME.war \
-        --spring.config.location=file:$APP_HOME/config/   \
-        < /dev/null > $APP_HOME/logs/app.log 2>&1 &
+    nohup java -jar $APP_HOME/$APP_NAME.war  < /dev/null > /dev/null 2>&1 &
 }
 
 function stop {
