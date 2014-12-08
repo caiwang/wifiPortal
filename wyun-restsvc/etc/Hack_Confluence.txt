@@ -1,0 +1,82 @@
+confluence和jira有很多有用的插件，但是使用了license的验证机制，需要破解。
+atlassian-universal-plugin-manager-plugin是atlassian所有产品的插件管理包，所以需要反编译这个包，进行修改。
+分步指南
+1. 在eclipse中新建confluence项目
+2. 解压atlassian-universal-plugin-manager-plugin-2.15.2.jar到confluece目录的classes目录下
+3. 用jad反编译所有classes文件
+jad.exe -r -ff -d src -s java classes/**/*.class
+4. 找到com/atlassian/extras/decoder/v2/Version2LicenseDecoder.java文件，按如下修改
+public boolean canDecode2(String licenseString)
+    {
+        int pos;
+        licenseString = removeWhiteSpaces(licenseString);
+        pos = licenseString.lastIndexOf('X');
+        if(pos == -1 || pos + 3 >= licenseString.length())
+            return false;
+        int version = Integer.parseInt(licenseString.substring(pos + 1, pos + 3));
+        if(version != 1 && version != 2)
+            return false;
+        try
+        {
+            String lengthStr = licenseString.substring(pos + 3);
+            int encodedLicenseLength = Integer.valueOf(lengthStr, 31).intValue();
+            return pos == encodedLicenseLength;
+        }
+        catch(NumberFormatException numberformatexception)
+        {
+            return false;
+        }
+    }
+    public boolean canDecode(String licenseString)
+    {
+        return true;
+    }
+    public Properties doDecode(String licenseString)
+    {
+        Properties result = null;
+        String encodedLicenseTextAndHash = null;
+        if(canDecode2(licenseString))
+        {
+            encodedLicenseTextAndHash = getLicenseContent(removeWhiteSpaces(licenseString));
+            byte zippedLicenseBytes[] = checkAndGetLicenseText(encodedLicenseTextAndHash);
+            Reader licenseText = unzipText(zippedLicenseBytes);
+            result = loadLicenseConfiguration(licenseText);
+        } else
+        {
+            encodedLicenseTextAndHash = removeWhiteSpaces(licenseString);
+            result = new Properties();
+            if(encodedLicenseTextAndHash != null && encodedLicenseTextAndHash.length() > 0)
+            {
+                String proStrs[] = encodedLicenseTextAndHash.split(",");
+                if(proStrs != null && proStrs.length > 0)
+                {
+                    String as[];
+                    int j = (as = proStrs).length;
+                    for(int i = 0; i < j; i++)
+                    {
+                        String property = as[i];
+                        String proStr[] = property.split("=");
+                        result.put(proStr[0], proStr[1]);
+                    }
+                }
+            }
+        }
+        System.out.println("result:" + result);
+        return result;
+    }
+5. 将编译好的class文件，放入原jar包，上传服务器，并重启
+6. 安装所需插件，用免费试用方式，然后到后台查看日志中的result，并按如下修改：
+Description=Polls for Confluence: COMMERCIAL,
+NumberOfUsers=-1,
+CreationDate=2014-09-30,
+Evaluation=false,
+com.simplenia.confluence.plugins.polls.active=true,
+licenseVersion=2,
+MaintenanceExpiryDate=2099-10-30,
+Organisation=COMMERCIAL license,
+SEN=SEN-L4654211,
+LicenseExpiryDate=2099-10-30,
+com.simplenia.confluence.plugins.polls.enterprise=true,
+LicenseTypeName=COMMERCIAL,
+PurchaseDate=2014-09-30
+7.回到插件管理界面，更新license，显示更新成功即可
