@@ -32,13 +32,21 @@
 ## Deployment structure
 
 wlsp@iserver:~/wlsp$ pwd
+
 /home/wlsp/wlsp
+
 wlsp@iserver:~/wlsp$ ll
+
 total 16
+
 drwxr-xr-x 3 wlsp users 4096 Dec  8 13:34 ./
+
 drwxr-xr-x 6 wlsp users 4096 Dec  8 13:34 ../
+
 drwxr-xr-x 2 wlsp users 4096 Dec  8 13:23 logs/
+
 lrwxrwxrwx 1 wlsp users   21 Dec  8 13:11 WYunRest.war -> ../WYunRest-0.1.1.war*
+
 -rwx------ 1 wlsp users 1330 Dec  8 13:18 wyun_svc.sh*
 
 
