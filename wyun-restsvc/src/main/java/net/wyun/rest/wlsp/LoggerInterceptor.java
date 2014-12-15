@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -82,6 +83,24 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter  {
 			@Override
 			public int read() throws IOException {
 				return stream.read();
+			}
+			
+			@Override
+		    public boolean isFinished() {
+		        throw new RuntimeException("Not yet implemented");
+		        //return false;
+		    }
+
+		    @Override
+		    public boolean isReady() {
+		        throw new RuntimeException("Not yet implemented");
+		        //return false;
+		    }
+
+			@Override
+			public void setReadListener(ReadListener listener) {
+
+			        throw new RuntimeException("Not yet implemented");
 			}
 		}
 	}

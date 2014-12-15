@@ -7,13 +7,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
- 
-
 import java.nio.charset.Charset;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ReadListener;
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
@@ -21,7 +20,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
  
-
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -99,6 +97,26 @@ public class LoggerFilter implements Filter {
 			public int read() throws IOException {
 				return stream.read();
 			}
+			
+			@Override
+		    public boolean isFinished() {
+		        throw new RuntimeException("Not yet implemented");
+		        //return false;
+		    }
+
+		    @Override
+		    public boolean isReady() {
+		        throw new RuntimeException("Not yet implemented");
+		        //return false;
+		    }
+
+			@Override
+			public void setReadListener(ReadListener listener) {
+
+			        throw new RuntimeException("Not yet implemented");
+			}
+
+		 
 		}
 	}
  
