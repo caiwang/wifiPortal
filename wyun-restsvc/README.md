@@ -27,6 +27,7 @@
 6.  mysql -uroot -p0ffs4t? wlsp
 
      service wyun_svc start to start server
+     
      service wyun_svc stop to stop server
 
 ## Deployment structure
