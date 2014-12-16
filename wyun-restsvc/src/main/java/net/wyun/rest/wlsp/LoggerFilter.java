@@ -42,7 +42,8 @@ public class LoggerFilter implements Filter {
 				(HttpServletRequest) request);
 		// wrappedRequest.getInputStream().read();
 		String body = IOUtils.toString(wrappedRequest.getReader());
-		logger.info("httpreq body: " + body);
+		String url = ((HttpServletRequest)request).getRequestURL().toString();
+		logger.info("http url: " + url + ", body: " + body);
 		wrappedRequest.resetInputStream();
 		chain.doFilter(wrappedRequest, response);
  
