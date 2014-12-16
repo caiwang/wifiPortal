@@ -39,7 +39,7 @@ public interface UserAccountsSvcApi {
 	
 	@Headers("Content-Type: application/json; charset=UTF-8")
 	@POST(USERACCOUNTS_SVC_PATH)
-	public Void addActVst(@Body UserAccounts v);
+	public Void addUserAccounts(@Body UserAccounts v);
 	
 	
 	@GET(USERACCOUNTS_RECTIME_SEARCH_PATH)
