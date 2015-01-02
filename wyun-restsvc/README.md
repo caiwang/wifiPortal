@@ -5,7 +5,7 @@
 2. In command line: gradle clean build
 3. copy the build/libs/war-file to production server.
 4. cd ~/wlsp
-   ln -sf ../WYunRest-x.x.x.war WYunRest.war
+5. ln -sf ../WYunRest-x.x.x.war WYunRest.war
 
 ## For dev.
 
