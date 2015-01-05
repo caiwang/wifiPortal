@@ -1,8 +1,12 @@
 package net.wyun.rest.wlsp;
 
 
+import net.wyun.rest.wlsp.client.impl.AuthSmsClient;
 import net.wyun.rest.wlsp.json.ResourcesMapper;
 import net.wyun.rest.wlsp.repository.VideoRepository;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
@@ -11,13 +15,13 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import ch.qos.logback.access.tomcat.LogbackValve;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 //Tell Spring to automatically inject any dependencies that are marked in
@@ -36,13 +40,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 // find any Controllers or other components that are part of our applciation.
 // Any class in this package that is annotated with @Controller is going to be
 // automatically discovered and connected to the DispatcherServlet.
-@Import(DataRestRepoConfig.class)
+//@Import(DataRestRepoConfig.class)
 @ComponentScan
 public class Application extends RepositoryRestMvcConfiguration {
+	
+	private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
 	// Tell Spring to launch our app!
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
+	}
+	
+	
+	public Application(){
+		super();
+		logger.info("initialize wlsp service now...");
+		logger.info("set up global unhandled exception handler.");
+		Thread.setDefaultUncaughtExceptionHandler(
+                new Thread.UncaughtExceptionHandler() {
+                    @Override public void uncaughtException(Thread t, Throwable e) {
+                        logger.error(t.getName()+": "+e);
+                    }
+                });
 	}
 	
 	// We are overriding the bean that RepositoryRestMvcConfiguration 
@@ -62,36 +81,43 @@ public class Application extends RepositoryRestMvcConfiguration {
 	// client.
 	//
 	// See the ResourcesMapper class for more details.
-	/*
+	
 	@Override
 	public ObjectMapper halObjectMapper(){
 		ObjectMapper om = new ResourcesMapper();
+		
+		 om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+	        //Don't fail on incoming JSON missing fields
+	     om.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
 		return om;
 	}
-	*/
 	
 	
-	    @Bean
-	    public EmbeddedServletContainerCustomizer containerCustomizer(){
-	        return new EmbeddedServletContainerCustomizer() {
-	            public void customize(ConfigurableEmbeddedServletContainer factory) {
+	@Bean
+	public AuthSmsClient createAuthSmsClient(){
+		return new AuthSmsClient();
+	}
+	
+	
+	@Bean
+	public EmbeddedServletContainerCustomizer containerCustomizer() {
+		return new EmbeddedServletContainerCustomizer() {
+			public void customize(ConfigurableEmbeddedServletContainer factory) {
 
-	                if(factory instanceof TomcatEmbeddedServletContainerFactory){
-	                    TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) factory;
+				if (factory instanceof TomcatEmbeddedServletContainerFactory) {
+					TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) factory;
 
-	                    LogbackValve  logbackValve = new LogbackValve();
-	                    //TODO: not sure how to handle the logback-access.xml
-	                    //its location maybe needs to be set in a property file
-	                    logbackValve.setFilename("logback-access.xml");
-	                    containerFactory.addContextValves(logbackValve);
+					LogbackValve logbackValve = new LogbackValve();
+					// TODO: not sure how to handle the logback-access.xml
+					// its location maybe needs to be set in a property file
+					logbackValve.setFilename("logback-access.xml");
+					containerFactory.addContextValves(logbackValve);
 
+				}
 
-	                }
+			}
 
-	            }
-
-				
-	        };
-	    }
+		};
+	}
 	
 }
