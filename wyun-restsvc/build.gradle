@@ -28,7 +28,7 @@ war {
         attributes 'Main-Class': 'net.wyun.rest.wlsp.Application'
     }
     baseName = 'WYunRest'
-    version =  '0.1.1'
+    version =  '0.1.2'
 }
 
 
@@ -59,7 +59,7 @@ dependencies {
     
     
     compile("com.google.guava:guava:17.0")
-    compile("com.squareup.retrofit:retrofit:1.6.1")
+    compile("com.squareup.retrofit:retrofit:1.8.0")
     compile("com.squareup.retrofit:converter-jackson:1.6.1")
     compile("commons-io:commons-io:2.4")
     
