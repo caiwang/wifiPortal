@@ -3,7 +3,7 @@ package net.wyun.rest.wlsp.controller;
 import java.util.Collection;
 import java.util.Date;
 
-import net.wyun.rest.wlsp.client.AuthSmsSvcApi;
+import net.wyun.lottery.ScheduledLotteryTasks;
 import net.wyun.rest.wlsp.client.ProdOrderSvcApi;
 import net.wyun.rest.wlsp.client.impl.AuthSmsClient;
 import net.wyun.rest.wlsp.repository.AuthSms;
@@ -43,7 +43,8 @@ import com.google.common.collect.Lists;
 @Controller
 public class ProdOrderSvc implements ProdOrderSvcApi {
 	
-	
+	@Autowired
+	private ScheduledLotteryTasks lotteryHandler;
 	//
 	@Autowired
 	private ProdOrderRepository orders;
@@ -68,14 +69,17 @@ public class ProdOrderSvc implements ProdOrderSvcApi {
 	//
 	@RequestMapping(value=ProdOrderSvcApi.PRODORDER_SVC_PATH, method=RequestMethod.POST)
 	public @ResponseBody boolean addProdOrder(@RequestBody ProdOrder v){
-		 orders.save(v);
+		 ProdOrder v1 = orders.save(v);
+		 System.out.println("order id: " + v1.getId());
+		 
+		 this.lotteryHandler.addProdOrder(v1);
 		 
 		 //sms to operator
-		 AuthSms as1 = this.generateOperatorAuthSms(v);
+		 AuthSms as1 = this.generateOperatorAuthSms(v1);
 		 smsClient.addAuthSms(as1);
 		 
 		 //sms to customer or user
-		 AuthSms as2 = this.generateUserAuthSms(v);
+		 AuthSms as2 = this.generateUserAuthSms(v1);
 		 smsClient.addAuthSms(as2);
 		 return true;
 	}
@@ -100,11 +104,17 @@ public class ProdOrderSvc implements ProdOrderSvcApi {
 	}
 	
 	private static String Operator_Phone_Num = "18202297821";
+	private static String O_Prefix = "双色球";
+	private static String O_Postfix = "请下单Ref#";
+	private static String U_Prefix = "您彩票双色球";
+	private static String U_Postfix = "已收到订单，下单成功后发送标志码，请注意查收";
 	private AuthSms generateOperatorAuthSms(ProdOrder v) {
 		AuthSms as = new AuthSms();
 		
-		as.setPrefix("彩票：" + v.getProdspec());
-		as.setSms("请购买");
+		as.setPrefix(v.getProdspec());
+		as.setSms(O_Prefix + v.getProdspec() + O_Postfix + v.getId());
+		as.setPostfix("" + v.getId());
+		as.setMsgtype(O_Prefix);
 		as.setPhone(Operator_Phone_Num);
 		as.setSender(v.getSender());
 		as.setNetid(v.getNetid());
@@ -118,8 +128,10 @@ public class ProdOrderSvc implements ProdOrderSvcApi {
 	private AuthSms generateUserAuthSms(ProdOrder v) {
 		AuthSms as = new AuthSms();
 		
-		as.setPrefix("用户 " + v.getRecipname() + ", " + v.getProdspec());
-		as.setSms("彩票回执");
+		as.setPrefix(v.getProdspec());
+		as.setSms(U_Prefix + v.getProdspec() + U_Postfix);
+		as.setPostfix("" + v.getId());
+		as.setMsgtype(O_Prefix);
 		as.setPhone(v.getRecipphone1());
 		as.setSender(v.getSender());
 		as.setNetid(v.getNetid());
