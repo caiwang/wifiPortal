@@ -89,19 +89,19 @@ public class AuthSms {
 		this.phone = phone;
 	}
 
-	public int getStat() {
+	public short getStat() {
 		return stat;
 	}
 
-	public void setStat(int stat) {
+	public void setStat(short stat) {
 		this.stat = stat;
 	}
 
-	public int getOptflag() {
+	public short getOptflag() {
 		return optflag;
 	}
 
-	public void setOptflag(int optflag) {
+	public void setOptflag(short optflag) {
 		this.optflag = optflag;
 	}
 
@@ -160,12 +160,23 @@ public class AuthSms {
 	public void setSendtime(Date sendtime) {
 		this.sendtime = sendtime;
 	}
+	
+	public String getMsgtype() {
+		return msgtype;
+	}
+
+
+	public void setMsgtype(String msgtype) {
+		this.msgtype = msgtype;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
 	private long srcid;
+	
+	private String msgtype;  //for ex. 双色球
 	
 	private String prefix;
 	
@@ -179,9 +190,9 @@ public class AuthSms {
 	
 	private String phone;
 	
-	private int stat;
+	private short stat;
 	
-	private int optflag;
+	private short optflag;
 	
 	private int token;
 	
