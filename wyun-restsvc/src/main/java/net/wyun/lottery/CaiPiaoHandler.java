@@ -38,7 +38,7 @@ public class CaiPiaoHandler {
 	
 	private final static String CP_Url = "http://caipiao.163.com/";
 	private final static String loginUrl = "https://reg.163.com/logins.jsp";
-	private final static String summaryUrl = "http://caipiao.163.com/my/order.html";
+	private final static String summaryUrl = "http://caipiao.163.com/my/order.html?ifWaitingAward=1&ifWin=0";
 	
 	/**
 	 * 
@@ -75,13 +75,29 @@ public class CaiPiaoHandler {
 		// 2. go to order summary url.
 		String result = getPageContent(summaryUrl);
 		FileHelper.save(result, "order.html");
-
-		String orderUrl = "http://caipiao.163.com/hit/n_2014122614CP50275996.html";
-		result = getPageContent(orderUrl);
-		FileHelper.save(result, "order_n.html");
+		//<table class="tableData">
+		Document os = Jsoup.parse(result);
+		
+		Elements es = os.select("table.tableData tr");
+		int e_num = es.size();
+		if(e_num > 1){
+			
+			for (int i=1; i < e_num; i++){
+				Element e = es.get(i);
+				Elements tds = e.select("td");
+				for(Element td:tds){
+					System.out.print(td.text());
+				}
+				System.out.print('\n');
+				
+			}
+			
+		}
+		
+		
 
 		// 3. caipiao detail
-		String cpXQ = "http://caipiao.163.com/hit/nd_shuzi_cpxq.html?pageSize=10&pageNum=1&lottOrderId=2014123005CP24979085";
+		String cpXQ = "http://caipiao.163.com/hit/nd_shuzi_cpxq.html?pageSize=10&pageNum=1&lottOrderId=2015010612CP73043502";
 		result = getPageContent(cpXQ);
 		FileHelper.save(result, "order_detail.html");
 
@@ -104,12 +120,6 @@ public class CaiPiaoHandler {
 		
 	}
 
-	public static void main(String[] args) throws Exception {
-
-		CaiPiaoHandler handler = new CaiPiaoHandler();
-        handler.init();
-        handler.getActiveCaiPiaos();
-	}
 
 	/**
 	 *  used in login to the cp.163.com
