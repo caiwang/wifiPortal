@@ -1,7 +1,6 @@
 package net.wyun.rest.wlsp;
 
 
-import net.wyun.rest.wlsp.client.impl.AuthSmsClient;
 import net.wyun.rest.wlsp.json.ResourcesMapper;
 import net.wyun.rest.wlsp.repository.VideoRepository;
 
@@ -41,7 +40,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 // Any class in this package that is annotated with @Controller is going to be
 // automatically discovered and connected to the DispatcherServlet.
 //@Import(DataRestRepoConfig.class)
-@ComponentScan
+@ComponentScan("net.wyun")
 public class Application extends RepositoryRestMvcConfiguration {
 	
 	private static final Logger logger = LoggerFactory.getLogger(Application.class);
@@ -90,12 +89,6 @@ public class Application extends RepositoryRestMvcConfiguration {
 	        //Don't fail on incoming JSON missing fields
 	     om.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
 		return om;
-	}
-	
-	
-	@Bean
-	public AuthSmsClient createAuthSmsClient(){
-		return new AuthSmsClient();
 	}
 	
 	
