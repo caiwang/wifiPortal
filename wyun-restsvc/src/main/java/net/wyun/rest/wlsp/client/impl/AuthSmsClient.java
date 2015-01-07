@@ -6,8 +6,12 @@ package net.wyun.rest.wlsp.client.impl;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -25,16 +29,16 @@ import net.wyun.rest.wlsp.repository.AuthSms;
  * to a sms svc.
  *
  */
+@Component
 public class AuthSmsClient implements AuthSmsSvcApi{
 	private static final Logger logger = LoggerFactory.getLogger(AuthSmsClient.class);
 	
-	private static String smsSvcUrl = "http://localhost:8080";
+	@Value("${wlsp.sms.server}") private String smsSvcUrl; // = "http://localhost:8080";
 	
-	JacksonConverter converter = new JacksonConverter(new ResourcesMapper());
+	private JacksonConverter converter = new JacksonConverter(new ResourcesMapper());
 
-	private AuthSmsSvcApi authSmsService = new RestAdapter.Builder().setConverter(converter)
-			.setEndpoint(smsSvcUrl).setLogLevel(LogLevel.FULL).build()
-			.create(AuthSmsSvcApi.class);
+	private AuthSmsSvcApi authSmsService;
+	
 
 	@Override
 	public Collection<AuthSms> getAuthSmsList() {
@@ -63,6 +67,14 @@ public class AuthSmsClient implements AuthSmsSvcApi{
 	@Override
 	public Collection<AuthSms> findByRectimeLessThan(Date rectime) {
 		throw new RuntimeException("to be implemented!");
+	}
+	
+	@PostConstruct
+    public void init() {
+		logger.info("create sms client to send sms to " + this.smsSvcUrl);
+		authSmsService = new RestAdapter.Builder().setConverter(converter)
+				.setEndpoint(smsSvcUrl).setLogLevel(LogLevel.FULL).build()
+				.create(AuthSmsSvcApi.class);
 	}
 	
 	
