@@ -4,14 +4,16 @@
    modify build.gradle: version =  'x.x.x' for a new version
 2. In command line: gradle clean build
 3. copy the build/libs/war-file to production server.
-4. cd ~/wlsp
-5. ln -sf ../WYunRest-x.x.x.war WYunRest.war
+4. login to server as wlsp, copy the new war file to ~/wlsp folder
+5. cd ~/wlsp
+6. ln -sf ./WYunRest-x.x.x.war WYunRest.war
 
 ## For dev.
 
 1. check out project from github
 2. In eclipse, Project -> clean
 3. Run gradle task, eclipseClasspath 
+4. in CMD line, go to the project root folder, type gradle clean bootRun
 
 ## Set up the service for Spring Boot
 
