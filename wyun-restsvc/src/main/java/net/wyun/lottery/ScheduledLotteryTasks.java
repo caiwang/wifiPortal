@@ -91,7 +91,7 @@ public class ScheduledLotteryTasks {
 						po.setProdspec(cp.getNumber());
 						po.setDelicode(bzm);
 						po.setDelidesp(cp.getPublishTime());
-						po.setDelimemo(cp.getOrderId());
+						po.setDelimemo(cp.getPeriods());
 						po.setUpdtime(new Date());
 						ProdOrder updatedOrder = orders.save(po);
 						logger.info("match caipiao: " + bzm + " with order " + cp.getOrderId());
@@ -123,7 +123,7 @@ public class ScheduledLotteryTasks {
 		AuthSms as = new AuthSms();
 		
 		as.setPrefix(v.getProdspec());
-		as.setSms(U_Prefix + v.getProdspec() + U_Midfix + v.getDelicode() + ", " + v.getDelidesp() );
+		as.setSms(U_Prefix + v.getProdspec() + ", " + v.getDelimemo() + U_Midfix + v.getDelicode() + ", " + v.getDelidesp() );
 		as.setPostfix("" + v.getId());
 		as.setMsgtype(O_Prefix);
 		as.setPhone(v.getRecipphone1());
