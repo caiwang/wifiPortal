@@ -116,14 +116,14 @@ public class ScheduledLotteryTasks {
 	}
 	
 	private static String O_Prefix = "双色球";
-	private static String U_Prefix = "您彩票双色球订单下单成功: ";
+	private static String U_Prefix = "福彩双色球,";
 	private static String U_Midfix = " 标志码: ";
 	private static String U_Postfix = "已收到订单，下单成功后发送标志码，请注意查收";
 	private AuthSms generateUserAuthSms(ProdOrder v) {
 		AuthSms as = new AuthSms();
 		
 		as.setPrefix(v.getProdspec());
-		as.setSms(U_Prefix + v.getProdspec() + ", " + v.getDelimemo() + U_Midfix + v.getDelicode() + ", " + v.getDelidesp() );
+		as.setSms(U_Prefix + v.getDelimemo() + ", " + v.getDelidesp() + ",REF#");
 		as.setPostfix("" + v.getId());
 		as.setMsgtype(O_Prefix);
 		as.setPhone(v.getRecipphone1());

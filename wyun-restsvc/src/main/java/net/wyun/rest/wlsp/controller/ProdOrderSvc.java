@@ -101,7 +101,7 @@ public class ProdOrderSvc implements ProdOrderSvcApi {
 		return null;
 	}
 	
-	private static String Operator_Phone_Num = "18202297821";
+	private static String Operator_Phone_Num = "18833500052";
 	private static String O_Prefix = "双色球";
 	private static String O_Postfix = "请下单 Ref#";
 	
@@ -109,7 +109,7 @@ public class ProdOrderSvc implements ProdOrderSvcApi {
 		AuthSms as = new AuthSms();
 		
 		as.setPrefix(O_Prefix);
-		as.setSms(O_Prefix + "彩票新单, " + O_Postfix + v.getId());
+		as.setSms("彩票新单, " + O_Postfix);
 		as.setPostfix("" + v.getId());
 		as.setMsgtype(O_Prefix);
 		as.setPhone(Operator_Phone_Num);
