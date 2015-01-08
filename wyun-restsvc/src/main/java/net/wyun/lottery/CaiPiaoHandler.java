@@ -30,7 +30,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CaiPiaoHandler {
 	
 	public final static String CP_USER = "13701272752@163.com";
@@ -46,13 +48,14 @@ public class CaiPiaoHandler {
 	public CaiPiaoHandler() throws Exception {
 		// make sure cookies is turn on
 		CookieHandler.setDefault(new CookieManager());
+		init();
 	}
 
 	private List<String> cookies;
 	private HttpsURLConnection conn;
 	private final String USER_AGENT = "Mozilla/5.0";
 	
-	public void init() throws Exception{
+	private void init() throws Exception{
 		// 1. login
 		login();
 	}
@@ -69,57 +72,113 @@ public class CaiPiaoHandler {
 		sendPost(loginUrl, postParams);
 	}
 	
-	public List<CaiPiao> getActiveCaiPiaos() throws Exception{
+	public List<CaiPiao> getActiveCaiPiaos() throws Exception
+	{
+		// 2. go to order summary url.
+		return getActiveCaiPiaos(summaryUrl);
+	}
+	
+	public List<CaiPiao> getActiveCaiPiaos(String url) throws Exception {
+
+		String result = getPageContent(url);
+		//FileHelper.save(result, "order.html");
+		// <table class="tableData">
+		Document os = Jsoup.parse(result);
+		return this.getActiveCaiPiaos(os);
+	}
+	
+	/**
+	 * Generate a List of CaiPiao with no details
+	 * @return
+	 * @throws Exception
+	 */
+	public List<CaiPiao> getActiveCaiPiaos(Document doc) throws Exception{
 		
 		List<CaiPiao> actives = new ArrayList<CaiPiao>();
-		// 2. go to order summary url.
-		String result = getPageContent(summaryUrl);
-		FileHelper.save(result, "order.html");
-		//<table class="tableData">
-		Document os = Jsoup.parse(result);
 		
-		Elements es = os.select("table.tableData tr");
+		Elements es = doc.select("table.tableData tr"); //here got all active caipiaos
 		int e_num = es.size();
-		if(e_num > 1){
+		if(e_num > 1){ //the first tr is for the headers
 			
 			for (int i=1; i < e_num; i++){
 				Element e = es.get(i);
 				Elements tds = e.select("td");
+				/*
 				for(Element td:tds){
-					System.out.print(td.text());
+					System.out.println(td.text());
 				}
-				System.out.print('\n');
+				*/
+				
+				CaiPiao cp = new CaiPiao();
+				cp.setOrderTime(tds.get(0).text());
+				cp.setPeriods(tds.get(2).text().replace("普通投注", ""));
+				cp.setPublishTime(tds.get(5).text().replace("等待开奖", ""));
+				Elements hrefs = tds.get(6).select("a");
+				for(Element h:hrefs){
+					//System.out.println(h.attr("href")); ///order/order_continueOrder.html?lotteryOrderId=2015010711CP93012077
+				}
+				
+				String detailLink = hrefs.get(1).attr("href");
+				int ind = detailLink.indexOf('=');
+				cp.setOrderId(detailLink.substring(ind+1));
+				System.out.println(cp.getOrderId());
+				
+				actives.add(cp);
+
 				
 			}
 			
 		}
 		
+		getDetailsCaiPiaos(actives);
 		
+		return actives;
+		
+	}
 
-		// 3. caipiao detail
-		String cpXQ = "http://caipiao.163.com/hit/nd_shuzi_cpxq.html?pageSize=10&pageNum=1&lottOrderId=2015010612CP73043502";
-		result = getPageContent(cpXQ);
-		FileHelper.save(result, "order_detail.html");
+	
+	/**
+	 * pass in a list of CaiPiaos, then fill in details from the detail page
+	 * pre-condition, the CaiPiao has a valid order id
+	 * @param cps
+	 */
+	private void getDetailsCaiPiaos(List<CaiPiao> cps) throws Exception{
+		
+		for(CaiPiao cp:cps){
+			fillDetailsCaiPiao(cp);
+		}
+		
+		
+	}
+	
+	private final static String cpXQ = "http://caipiao.163.com/hit/nd_shuzi_cpxq.html?pageSize=10&pageNum=1&lottOrderId=";
+	private void fillDetailsCaiPiao(CaiPiao cp) throws Exception{
+		
+		String detailLink = cpXQ + cp.getOrderId();
+		String result = getPageContent(detailLink);
+		//FileHelper.save(result, "order_detail.html");
 
 		Document doc = Jsoup.parse(result);
 		Elements trs = doc.select("tr");
 
 		System.out.println("rows: " + trs.size());
 		for (Element e : trs) {
-			System.out.println(e);
+			//System.out.println(e);
 		}
 		Element e1 = trs.get(0);
+		Elements spans = e1.select("span");
+		String bzm = spans.get(1).text().replace("彩票标识码：", "");
+		cp.setBiaoZhiMa(bzm);
+		
 		Element e2 = trs.get(1);
 
-		String txt = e2.select("span").text().replace("红球：", "")
-				.replace("蓝球：", "").replace("单式", "");
+		//String txt = e2.select("span").text().replace("红球：", "").replace("蓝球：", "").replace("单式", "").replaceAll("[^\\d.]", "");
+		String txt = e2.select("span").text().replaceAll("[^\\d.]", "");
+		
+		cp.setNumber(txt);
 
 		System.out.println("caipiao #: " + txt);
-		
-		return actives;
-		
 	}
-
 
 	/**
 	 *  used in login to the cp.163.com
