@@ -78,10 +78,8 @@ public class ProdOrderSvc implements ProdOrderSvcApi {
 		 AuthSms as1 = this.generateOperatorAuthSms(v1);
 		 smsClient.addAuthSms(as1);
 		 
-		 //sms to customer or user
-		 AuthSms as2 = this.generateUserAuthSms(v1);
-		 smsClient.addAuthSms(as2);
 		 return true;
+		
 	}
 	
 	// Receives GET requests to /video and returns the current
@@ -105,14 +103,13 @@ public class ProdOrderSvc implements ProdOrderSvcApi {
 	
 	private static String Operator_Phone_Num = "18202297821";
 	private static String O_Prefix = "双色球";
-	private static String O_Postfix = "请下单Ref#";
-	private static String U_Prefix = "您彩票双色球";
-	private static String U_Postfix = "已收到订单，下单成功后发送标志码，请注意查收";
+	private static String O_Postfix = "请下单 Ref#";
+	
 	private AuthSms generateOperatorAuthSms(ProdOrder v) {
 		AuthSms as = new AuthSms();
 		
-		as.setPrefix(v.getProdspec());
-		as.setSms(O_Prefix + v.getProdspec() + O_Postfix + v.getId());
+		as.setPrefix(O_Prefix);
+		as.setSms(O_Prefix + "彩票新单, " + O_Postfix + v.getId());
 		as.setPostfix("" + v.getId());
 		as.setMsgtype(O_Prefix);
 		as.setPhone(Operator_Phone_Num);
@@ -125,22 +122,7 @@ public class ProdOrderSvc implements ProdOrderSvcApi {
 		return as;
 	}
 	
-	private AuthSms generateUserAuthSms(ProdOrder v) {
-		AuthSms as = new AuthSms();
-		
-		as.setPrefix(v.getProdspec());
-		as.setSms(U_Prefix + v.getProdspec() + U_Postfix);
-		as.setPostfix("" + v.getId());
-		as.setMsgtype(O_Prefix);
-		as.setPhone(v.getRecipphone1());
-		as.setSender(v.getSender());
-		as.setNetid(v.getNetid());
-		as.setProgid(v.getProgid());
-		as.setOptime(new Date());
-		as.setSendtime(new Date());
-		
-		return as;
-	}
+	
 
 
 }
