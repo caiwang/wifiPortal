@@ -12,4 +12,8 @@ spring.datasource.validationQuery=SELECT 1
 
 spring.datasource.driverClassName=com.mysql.jdbc.Driver
 
-# LOGGING
+#wlsp
+wlsp.lottery.name=iserver
+wlsp.lottery.delay=180000
+
+wlsp.sms.server=http://221.239.107.13:8080
