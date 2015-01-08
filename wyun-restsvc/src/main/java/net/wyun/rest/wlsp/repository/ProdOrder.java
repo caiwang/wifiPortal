@@ -280,7 +280,10 @@ public class ProdOrder {
 	 private String recipphone2; // varchar(30) DEFAULT NULL,	#	recipient phone number #2
 	 private String recipemail; // varchar(64) DEFAULT NULL,	#	recipient phone email
 	 private String assignto; // varchar(64) DEFAULT 'iserver',	#	processor of the order: iserver/local
+	 
+	 @Column(unique=true )   //it is used only for ddl generation. The unique constraint is enforced in database
 	 private String delicode; // varchar(36) DEFAULT NULL,	#	delivery code (link to delivery table)
+	 
 	 private String delidesp; // varchar(128) DEFAULT NULL,	#	delivery description
 	 private String delimemo; // varchar(128) DEFAULT NULL,	#	delivery memo
 	 
