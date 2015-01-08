@@ -30,11 +30,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CaiPiaoHandler {
 	
+	private static final Logger logger = LoggerFactory.getLogger(CaiPiaoHandler.class);
 	public final static String CP_USER = "13701272752@163.com";
 	public final static String CP_PW = "123ZAQqaz";
 	
@@ -57,6 +60,7 @@ public class CaiPiaoHandler {
 	
 	private void init() throws Exception{
 		// 1. login
+		logger.info("initialization, login...");
 		login();
 	}
 
@@ -177,7 +181,7 @@ public class CaiPiaoHandler {
 		
 		cp.setNumber(txt);
 
-		System.out.println("caipiao #: " + txt);
+		logger.info("caipiao #: " + txt);
 	}
 
 	/**
@@ -217,9 +221,9 @@ public class CaiPiaoHandler {
 		wr.close();
 
 		int responseCode = conn.getResponseCode();
-		System.out.println("\nSending 'POST' request to URL : " + url);
-		System.out.println("Post parameters : " + postParams);
-		System.out.println("Response Code : " + responseCode);
+		logger.info("Sending 'POST' request to URL : " + url);
+		logger.info("Post parameters : " + postParams);
+		logger.info("Response Code : " + responseCode);
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 		String inputLine;
@@ -257,8 +261,8 @@ public class CaiPiaoHandler {
 			}
 		}
 		int responseCode = conn.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);
+		logger.info("Sending 'GET' request to URL : " + url);
+		logger.info("Response Code : " + responseCode);
 
 		/*
 		 * Well I'm thinking the problem is when you are reading from the
@@ -289,7 +293,7 @@ public class CaiPiaoHandler {
 	public String fillLoginForm(String html, String username, String password)
 			throws UnsupportedEncodingException {
 
-		System.out.println("Extracting form's data...");
+		logger.info("Extracting form's data...");
 
 		List<String> paramList = new ArrayList<String>();
 		paramList.add("username" + "=" + URLEncoder.encode(username, "UTF-8"));

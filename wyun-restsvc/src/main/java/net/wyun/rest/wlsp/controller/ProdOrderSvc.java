@@ -3,6 +3,8 @@ package net.wyun.rest.wlsp.controller;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletResponse;
+
 import net.wyun.lottery.ScheduledLotteryTasks;
 import net.wyun.rest.wlsp.client.ProdOrderSvcApi;
 import net.wyun.rest.wlsp.client.impl.AuthSmsClient;
@@ -10,6 +12,8 @@ import net.wyun.rest.wlsp.repository.AuthSms;
 import net.wyun.rest.wlsp.repository.ProdOrder;
 import net.wyun.rest.wlsp.repository.ProdOrderRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,6 +47,8 @@ import com.google.common.collect.Lists;
 @Controller
 public class ProdOrderSvc implements ProdOrderSvcApi {
 	
+	private static final Logger logger = LoggerFactory.getLogger(ProdOrderSvc.class);
+	
 	@Autowired
 	private ScheduledLotteryTasks lotteryHandler;
 	//
@@ -52,6 +58,8 @@ public class ProdOrderSvc implements ProdOrderSvcApi {
 	@Autowired
 	private AuthSmsClient smsClient;
 
+	
+	private final static String USER_PHONENUM = ", user phone#: ";
 	// Receives POST requests to /prodorder and converts the HTTP
 	// request body, which should contain json, into a ProdOrder
 	// object before adding it to the list. The @RequestBody
@@ -68,9 +76,9 @@ public class ProdOrderSvc implements ProdOrderSvcApi {
 	// in synch.
 	//
 	@RequestMapping(value=ProdOrderSvcApi.PRODORDER_SVC_PATH, method=RequestMethod.POST)
-	public @ResponseBody boolean addProdOrder(@RequestBody ProdOrder v){
+	public @ResponseBody boolean addProdOrder(@RequestBody ProdOrder v, HttpServletResponse response){
 		 ProdOrder v1 = orders.save(v);
-		 System.out.println("order id: " + v1.getId());
+		 logger.info("process new order (order id): " + v1.getId() + USER_PHONENUM + v.getRecipphone1());
 		 
 		 this.lotteryHandler.addProdOrder(v1);
 		 
@@ -78,6 +86,7 @@ public class ProdOrderSvc implements ProdOrderSvcApi {
 		 AuthSms as1 = this.generateOperatorAuthSms(v1);
 		 smsClient.addAuthSms(as1);
 		 
+		 response.setStatus(HttpServletResponse.SC_CREATED);
 		 return true;
 		
 	}
