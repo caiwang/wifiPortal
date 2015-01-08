@@ -10,8 +10,9 @@ import java.util.Date;
 
 
 
-import net.wyun.rest.wlsp.repository.ActVst;
-import net.wyun.rest.wlsp.repository.AuthSms;
+
+import javax.servlet.http.HttpServletResponse;
+
 import net.wyun.rest.wlsp.repository.ProdOrder;
 import retrofit.http.Body;
 import retrofit.http.GET;
@@ -39,7 +40,7 @@ public interface ProdOrderSvcApi {
 	
 	@Headers("Content-Type: application/json; charset=UTF-8")
 	@POST(PRODORDER_SVC_PATH)
-	public boolean addProdOrder(@Body ProdOrder v);
+	public boolean addProdOrder(@Body ProdOrder v, HttpServletResponse response);
 	
 	
 	@GET(PRODORDER_RECTIME_SEARCH_PATH)
