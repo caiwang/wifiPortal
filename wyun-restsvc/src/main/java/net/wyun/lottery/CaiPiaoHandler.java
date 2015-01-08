@@ -63,7 +63,7 @@ public class CaiPiaoHandler {
 	private void login() throws Exception {
 		//1. Send a "GET" request, so that you can extract the form's data.
 		String page = getPageContent(CP_Url);
-		FileHelper.save(page, "caipiao.html");
+		//FileHelper.save(page, "caipiao.html");
 		
 		String postParams = fillLoginForm(page, CP_USER, CP_PW);
 
