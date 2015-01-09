@@ -51,7 +51,7 @@ public class ScheduledLotteryTasks {
 	@Autowired
 	private ProdOrderRepository orders;
 	
-	@Autowired
+	
 	CaiPiaoHandler handler;
 	
 	@Autowired
@@ -79,7 +79,7 @@ public class ScheduledLotteryTasks {
 		
 		// process lottery here
 		try {
-			
+			handler = new CaiPiaoHandler();
 			List<CaiPiao> cps = handler.getActiveCaiPiaos();
 			for(CaiPiao cp:cps){
 				//new PrintStream(System.out, true, "UTF-8").println(cp.toString());
