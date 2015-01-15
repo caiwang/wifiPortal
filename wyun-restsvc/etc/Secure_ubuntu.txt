@@ -1,0 +1,14 @@
+Secure Ubuntu box: (http://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers)
+
+apt-get update
+apt-get upgrade
+
+apt-get install fail2ban
+
+#ssh port to 2708, root ssh login disabled
+
+#Set Up A Firewall
+
+sudo ufw allow 2708
+sudo ufw allow 8080
+sudo ufw enable
