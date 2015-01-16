@@ -11,6 +11,7 @@ import net.wyun.rest.wlsp.client.impl.AuthSmsClient;
 import net.wyun.rest.wlsp.repository.AuthSms;
 import net.wyun.rest.wlsp.repository.ProdOrder;
 import net.wyun.rest.wlsp.repository.ProdOrderRepository;
+import net.wyun.service.SmsService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,7 @@ public class ProdOrderSvc implements ProdOrderSvcApi {
 	private ProdOrderRepository orders;
 	
 	@Autowired
-	private AuthSmsClient smsClient;
+	private SmsService smsSvc;
 
 	
 	private final static String USER_PHONENUM = ", user phone#: ";
@@ -80,12 +81,17 @@ public class ProdOrderSvc implements ProdOrderSvcApi {
 		 ProdOrder v1 = orders.save(v);
 		 logger.info("process new order (order id): " + v1.getId() + USER_PHONENUM + v.getRecipphone1());
 		 
-		 this.lotteryHandler.addProdOrder(v1);
+		 if(!lotteryHandler.addProdOrder(v1)){
+			 logger.error("cannot add prodorder to the lottery handler service: " + v1.getId());
+		 }
+			
 		 
-		 //sms to operator
+		 //sms to operator //sms service is a async call
 		 AuthSms as1 = this.generateOperatorAuthSms(v1);
-		 smsClient.addAuthSms(as1);
-		 
+	     if(!smsSvc.addAuthSms(as1)){
+	    	 logger.error("cannot add authsms to the sms service: " + v1.getId());
+	     }
+	
 		 response.setStatus(HttpServletResponse.SC_CREATED);
 		 return true;
 		
