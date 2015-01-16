@@ -17,7 +17,6 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.RestAdapter.LogLevel;
 import retrofit.converter.JacksonConverter;
-import net.wyun.rest.wlsp.LoggerInterceptor;
 import net.wyun.rest.wlsp.client.AuthSmsSvcApi;
 import net.wyun.rest.wlsp.json.ResourcesMapper;
 import net.wyun.rest.wlsp.repository.AuthSms;
@@ -46,6 +45,7 @@ public class AuthSmsClient implements AuthSmsSvcApi{
 	}
 
 	@Override
+	//@Async
 	public Void addAuthSms(AuthSms v) {
 		try{
 			authSmsService.addAuthSms(v);
