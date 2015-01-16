@@ -7,8 +7,9 @@ apt-get install fail2ban
 
 #ssh port to 2708, root ssh login disabled
 
-#Set Up A Firewall
+#Set Up A Firewall (in the future)
 
 sudo ufw allow 2708
 sudo ufw allow 8080
+sudo ufw allow 1723  #Enable port 1723 (pptpd)
 sudo ufw enable
