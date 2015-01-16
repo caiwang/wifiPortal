@@ -14,6 +14,6 @@ spring.datasource.driverClassName=com.mysql.jdbc.Driver
 
 #wlsp
 wlsp.lottery.name=iserver
-wlsp.lottery.delay=180000
+wlsp.lottery.delay=240000
 
 wlsp.sms.server=http://221.239.107.13:8080
