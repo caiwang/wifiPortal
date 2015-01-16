@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<property name="LOG_PATH" value="/home/wlsp/wlsp/logs/" />
+	<property name="LOG_PATH" value="/opt/wlsp/logs/" />
 	<include resource="org/springframework/boot/logging/logback/base.xml" />
 
 	<property name="FILE_LOG_PATTERN"
 		value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } [%t] --- %-40.40logger{39} : %m%n%wex" />
 
+<!-- 
 	<appender name="serverConsole"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<Append>true</Append>
@@ -20,7 +21,9 @@
 		</rollingPolicy>
 	</appender>
 
+ -->
 	<!-- Plain Text Rolling Appender -->
+	<!-- 
 	<appender name="server"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<Append>true</Append>
@@ -40,6 +43,7 @@
 		</rollingPolicy>
 	</appender>
 
+ -->
 	<!-- Plain Text Rolling Appender -->
 	<appender name="server-error"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -60,13 +64,6 @@
 		</rollingPolicy>
 	</appender>
 
-	<logger name="net.wyun" level="INFO">
-		<appender-ref ref="server" />
-		<appender-ref ref="server-error" />
-	</logger>
-	
-	<logger name="org.springframework.web" level="INFO" />
-	<logger name="org.hibernate.type" level="INFO" />
 
 	<root level="INFO">
 		<appender-ref ref="serverConsole" />
