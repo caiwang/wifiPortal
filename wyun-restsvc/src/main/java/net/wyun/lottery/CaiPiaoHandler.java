@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 public class CaiPiaoHandler {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CaiPiaoHandler.class);
+	//public final static String CP_USER = "18833500052@163.com"; //"13701272752@163.com";
 	public final static String CP_USER = "13701272752@163.com";
 	public final static String CP_PW = "123ZAQqaz";
 	
@@ -157,6 +158,7 @@ public class CaiPiaoHandler {
 	private final static String cpXQ = "http://caipiao.163.com/hit/nd_shuzi_cpxq.html?pageSize=10&pageNum=1&lottOrderId=";
 	private void fillDetailsCaiPiao(CaiPiao cp) throws Exception{
 		
+		logger.info("Get details of order: " + cp.getOrderId());
 		String detailLink = cpXQ + cp.getOrderId();
 		String result = getPageContent(detailLink);
 		//FileHelper.save(result, "order_detail.html");
@@ -167,6 +169,11 @@ public class CaiPiaoHandler {
 		System.out.println("rows: " + trs.size());
 		for (Element e : trs) {
 			//System.out.println(e);
+		}
+		
+		if(trs.isEmpty()){
+			logger.warn("cannot get detail info for order with id: " + cp.getOrderId());
+			return;  //it means that this CaiPiao object is not complete
 		}
 		Element e1 = trs.get(0);
 		Elements spans = e1.select("span");
