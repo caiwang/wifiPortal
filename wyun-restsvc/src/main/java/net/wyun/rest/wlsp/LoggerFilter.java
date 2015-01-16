@@ -41,6 +41,14 @@ public class LoggerFilter implements Filter {
 		ResettableStreamHttpServletRequest wrappedRequest = new ResettableStreamHttpServletRequest(
 				(HttpServletRequest) request);
 		// wrappedRequest.getInputStream().read();
+		//
+		String method = ((HttpServletRequest) request).getMethod();
+		
+		if(method.equalsIgnoreCase("DELETE") || method.equalsIgnoreCase("PUT")){
+			logger.warn("No delete and put allowed: from " + request.getRemoteAddr());
+			return;
+		}
+		
 		String body = IOUtils.toString(wrappedRequest.getReader());
 		String url = ((HttpServletRequest)request).getRequestURL().toString();
 		logger.info("http url: " + url + ", body: " + body);
