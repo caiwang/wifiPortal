@@ -28,7 +28,7 @@ war {
         attributes 'Main-Class': 'net.wyun.rest.wlsp.Application'
     }
     baseName = 'WYunRest'
-    version =  '0.1.4'
+    version =  '0.1.5'
 }
 
 
