@@ -3,6 +3,7 @@ package net.wyun.rest.wlsp;
 
 import net.wyun.rest.wlsp.json.ResourcesMapper;
 import net.wyun.rest.wlsp.repository.VideoRepository;
+import net.wyun.util.SysInfoUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,7 @@ public class Application extends RepositoryRestMvcConfiguration {
 
 	// Tell Spring to launch our app!
 	public static void main(String[] args) {
+		System.out.println("current working dir: " + SysInfoUtil.getWorkingDir());
 		SpringApplication.run(Application.class, args);
 	}
 	
