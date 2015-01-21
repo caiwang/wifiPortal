@@ -16,6 +16,7 @@ import net.wyun.service.SmsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,19 +28,8 @@ import retrofit.http.GET;
 import com.google.common.collect.Lists;
 
 /**
- * This simple VideoSvc allows clients to send HTTP POST requests with
- * videos that are stored in memory using a list. Clients can send HTTP GET
- * requests to receive a JSON listing of the videos that have been sent to
- * the controller so far. Stopping the controller will cause it to lose the history of
- * videos that have been sent to it because they are stored in memory.
  * 
- * Notice how much simpler this VideoSvc is than the original VideoServlet?
- * Spring allows us to dramatically simplify our service. Another important
- * aspect of this version is that we have defined a VideoSvcApi that provides
- * strong typing on both the client and service interface to ensure that we
- * don't send the wrong paraemters, etc.
- * 
- * @author jules
+ * @author michaelyin
  *
  */
 
@@ -76,10 +66,19 @@ public class ProdOrderSvc implements ProdOrderSvcApi {
 	// client and service paths for the ProdOrderSvc are always
 	// in synch.
 	//
+	private final static String HOPE_DONATE = "hope";
 	@RequestMapping(value=ProdOrderSvcApi.PRODORDER_SVC_PATH, method=RequestMethod.POST)
 	public @ResponseBody boolean addProdOrder(@RequestBody ProdOrder v, HttpServletResponse response){
 		 ProdOrder v1 = orders.save(v);
 		 logger.info("process new order (order id): " + v1.getId() + USER_PHONENUM + v.getRecipphone1());
+		 
+		 //if is for hope donation
+		 if(HOPE_DONATE.equals(v1.getProdtype())){
+			 logger.info("process new order (order id) for hope donation: " + v1.getId() + USER_PHONENUM + v.getRecipphone1());
+			 
+			 response.setStatus(HttpServletResponse.SC_CREATED);
+			 return true;
+		 }
 		 
 		 if(!lotteryHandler.addProdOrder(v1)){
 			 logger.error("cannot add prodorder to the lottery handler service: " + v1.getId());
@@ -116,7 +115,7 @@ public class ProdOrderSvc implements ProdOrderSvcApi {
 		return null;
 	}
 	
-	private static String Operator_Phone_Num = "18833500052";
+	@Value("${caipiao.operator.num}") private String Operator_Phone_Num; // = "13333339022"; //"18833500052";
 	private static String O_Prefix = "双色球";
 	private static String O_Postfix = "请下单 Ref#";
 	
