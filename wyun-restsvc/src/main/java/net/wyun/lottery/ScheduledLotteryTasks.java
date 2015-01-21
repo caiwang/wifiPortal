@@ -22,6 +22,7 @@ import net.wyun.rest.wlsp.repository.ProdOrder;
 import net.wyun.rest.wlsp.repository.ProdOrderRepository;
 import net.wyun.service.SmsService;
 import net.wyun.util.DateUtils;
+import net.wyun.util.SysInfoUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +66,9 @@ public class ScheduledLotteryTasks {
 
 	@Value("${wlsp.lottery.name}")
 	private String myServer;
+	
+	@Value("${caipiao.blocked.hours}")
+	private String blockedHoursStr;
 
 	/*
 	 * add a new ProdOrder to the Q
@@ -77,9 +81,8 @@ public class ScheduledLotteryTasks {
 	@Scheduled(fixedDelayString = "${wlsp.lottery.delay}")
 	public void matchLotteryToOrder() {
 		
-		logger.info("### [Lottery Scheduler] on "
-				+ dateFormat.format(new Date()));
-		
+		logger.info("### [Lottery Scheduler] on " + dateFormat.format(new Date()));
+		logger.info("sys info: " + SysInfoUtil.getSysInfo());
 		
 		//find out blocking time for example: from midnight till 5am
 		String hour = DateUtils.getHour();
@@ -177,15 +180,17 @@ public class ScheduledLotteryTasks {
         
     }
 
-	public static Set<String> generateBlockingHours() {
+	public Set<String> generateBlockingHours() {
 		Set<String> blockedHours = new HashSet<String>();
-		blockedHours.add("00");
-		blockedHours.add("01");
-		blockedHours.add("02");
-
-		blockedHours.add("03");
-		blockedHours.add("04");
-		blockedHours.add("05");
+		
+		if(null == blockedHoursStr){
+			blockedHoursStr = "00,01,02,03,04,05";
+		}
+		
+		String[] hours = blockedHoursStr.split(",");
+		for(String hour:hours){
+			blockedHours.add(hour);
+		}
 		
 		return blockedHours;
 	}
