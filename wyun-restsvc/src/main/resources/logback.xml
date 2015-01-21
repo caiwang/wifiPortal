@@ -6,7 +6,7 @@
 	<property name="FILE_LOG_PATTERN"
 		value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } [%t] --- %-40.40logger{39} : %m%n%wex" />
 
-<!-- 
+
 	<appender name="serverConsole"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<Append>true</Append>
@@ -21,7 +21,6 @@
 		</rollingPolicy>
 	</appender>
 
- -->
 	<!-- Plain Text Rolling Appender -->
 	<!-- 
 	<appender name="server"
