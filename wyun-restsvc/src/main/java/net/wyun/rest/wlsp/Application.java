@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @EnableAutoConfiguration
 // Tell Spring to automatically create a JPA implementation of our
 // VideoRepository
-@EnableJpaRepositories(basePackageClasses = VideoRepository.class)
+@EnableJpaRepositories
 // Tell Spring to turn on WebMVC (e.g., it should enable the DispatcherServlet
 // so that requests can be routed to our Controllers)
 @EnableWebMvc
