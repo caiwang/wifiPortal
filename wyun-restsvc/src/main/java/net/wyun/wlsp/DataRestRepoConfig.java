@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.wyun.rest.wlsp;
+package net.wyun.wlsp;
 
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

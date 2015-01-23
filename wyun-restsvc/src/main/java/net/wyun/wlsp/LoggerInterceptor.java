@@ -1,84 +1,63 @@
 /**
  * 
  */
-package net.wyun.rest.wlsp;
+package net.wyun.wlsp;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ReadListener;
-import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
- 
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 /**
  * @author Xuecheng
  *
  */
-public class LoggerFilter implements Filter {
+public class LoggerInterceptor extends HandlerInterceptorAdapter  {
+
+	 private static final Logger logger = LoggerFactory
+	            .getLogger(LoggerInterceptor.class);
+	 
+	public boolean preHandle(HttpServletRequest request,
+			HttpServletResponse response, Object handler) throws Exception {
+		
+		String body = "";
+		//String body = IOUtils.toString(wrappedRequest.getReader());
+        logger.info("Request:===>" + request.getRequestURL().toString() + ", " + body);
+        
+        //if returned false, we need to make sure 'response' is sent
+        return true;
+	}
+
 	
-	private static final Logger logger = LoggerFactory.getLogger(LoggerFilter.class); 
-	public void destroy() {
-		// Nothing to do
-	}
- 
-	public void doFilter(ServletRequest request, ServletResponse response,
-			FilterChain chain) throws IOException, ServletException {
-		ResettableStreamHttpServletRequest wrappedRequest = new ResettableStreamHttpServletRequest(
-				(HttpServletRequest) request);
-		// wrappedRequest.getInputStream().read();
-		//
-		String method = ((HttpServletRequest) request).getMethod();
-		
-		if(method.equalsIgnoreCase("DELETE") || method.equalsIgnoreCase("PUT")){
-			logger.warn("No delete and put allowed: from " + request.getRemoteAddr());
-			return;
-		}
-		
-		String body = IOUtils.toString(wrappedRequest.getReader());
-		String url = ((HttpServletRequest)request).getRequestURL().toString();
-		logger.info("http url: " + url + ", body: " + body);
-		wrappedRequest.resetInputStream();
-		chain.doFilter(wrappedRequest, response);
- 
-	}
- 
-	public void init(FilterConfig arg0) throws ServletException {
-		// Nothing to do
-	}
- 
 	private static class ResettableStreamHttpServletRequest extends
 			HttpServletRequestWrapper {
- 
+
 		private byte[] rawData;
 		private HttpServletRequest request;
 		private ResettableServletInputStream servletStream;
- 
+
 		public ResettableStreamHttpServletRequest(HttpServletRequest request) {
 			super(request);
 			this.request = request;
 			this.servletStream = new ResettableServletInputStream();
 		}
- 
- 
+
 		public void resetInputStream() {
 			servletStream.stream = new ByteArrayInputStream(rawData);
 		}
- 
+
 		@Override
 		public ServletInputStream getInputStream() throws IOException {
 			if (rawData == null) {
@@ -87,21 +66,20 @@ public class LoggerFilter implements Filter {
 			}
 			return servletStream;
 		}
- 
+
 		@Override
 		public BufferedReader getReader() throws IOException {
 			if (rawData == null) {
-				rawData = IOUtils.toByteArray(this.request.getReader(), Charset.forName("UTF-8"));
+				rawData = IOUtils.toByteArray(this.request.getReader());
 				servletStream.stream = new ByteArrayInputStream(rawData);
 			}
 			return new BufferedReader(new InputStreamReader(servletStream));
 		}
-		
- 
+
 		private class ResettableServletInputStream extends ServletInputStream {
- 
+
 			private InputStream stream;
- 
+
 			@Override
 			public int read() throws IOException {
 				return stream.read();
@@ -124,10 +102,8 @@ public class LoggerFilter implements Filter {
 
 			        throw new RuntimeException("Not yet implemented");
 			}
-
-		 
 		}
 	}
- 
-	
+
+
 }
