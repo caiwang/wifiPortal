@@ -34,7 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @EnableJpaRepositories
 // Tell Spring to turn on WebMVC (e.g., it should enable the DispatcherServlet
 // so that requests can be routed to our Controllers)
-@EnableWebMvc
+//@EnableWebMvc
 // Tell Spring that this object represents a Configuration for the
 // application
 @Configuration
@@ -116,12 +116,13 @@ public class Application extends RepositoryRestMvcConfiguration {
 	
 	@Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/home").setViewName("home");
+        registry.addViewController("/d3").setViewName("home");
         registry.addViewController("/").setViewName("home");
        // registry.addViewController("/hello").setViewName("hello");
         registry.addViewController("/login").setViewName("login");
     }
 	
+	/*
 	@Bean
 	public EmbeddedServletContainerCustomizer containerCustomizer() {
 		return new EmbeddedServletContainerCustomizer() {
@@ -142,5 +143,5 @@ public class Application extends RepositoryRestMvcConfiguration {
 
 		};
 	}
-	
+	*/
 }
