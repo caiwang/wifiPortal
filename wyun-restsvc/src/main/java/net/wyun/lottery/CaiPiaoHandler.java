@@ -45,11 +45,20 @@ public class CaiPiaoHandler {
 	private final static String loginUrl = "https://reg.163.com/logins.jsp";
 	private final static String summaryUrl = "http://caipiao.163.com/my/order.html?ifWaitingAward=1&ifWin=0";
 	
+	private final static int SIXTY_FIVE_MIN = 65 * 60 * 1000;
+	private long handlerCreateTime;
+	boolean isExpired(){
+		long now = System.currentTimeMillis();
+		long dif = now - handlerCreateTime;
+		return dif > SIXTY_FIVE_MIN;
+	}
+	
 	/**
 	 * 
 	 */
 	public CaiPiaoHandler() throws Exception {
 		// make sure cookies is turn on
+		handlerCreateTime = System.currentTimeMillis();
 		CookieHandler.setDefault(new CookieManager());
 		init();
 	}
