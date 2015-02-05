@@ -97,7 +97,14 @@ public class ScheduledLotteryTasks {
 		
 		// process lottery here
 		try {
-			handler = new CaiPiaoHandler();
+			if(null == handler){
+				handler = new CaiPiaoHandler();
+			}
+			
+			if(handler.isExpired()){
+				handler = new CaiPiaoHandler();
+			}
+			
 			List<CaiPiao> cps = handler.getActiveCaiPiaos();
 			for(CaiPiao cp:cps){
 				//new PrintStream(System.out, true, "UTF-8").println(cp.toString());
@@ -161,19 +168,21 @@ public class ScheduledLotteryTasks {
 		logger.info(myServer + " Lottery scheduler: initialising ...");
         Collection<ProdOrder> os = orders.findByDelicodeIsNull(new Sort(Sort.Direction.ASC, "rectime"));
         for(ProdOrder po:os){
+        	//remove those belongs to hope
+        	if(po.getProdtype().equals("hope")) continue;
         	orderQ.offer(po);
         }
         logger.info("Orders from database: " + orderQ.size());
         
-        //last 24 hours
-        Date oneDayAgo = new Date(System.currentTimeMillis() - 1L * 24 * 3600 * 1000);
+        //last 24*3 hours
+        Date oneDayAgo = new Date(System.currentTimeMillis() - 3L * 24 * 3600 * 1000);
         Collection<ProdOrder> pos = orders.findByRectimeGreaterThan(oneDayAgo);
         
         for(ProdOrder po:pos){
         	if(null != po.getDelicode()) 
         		usedBiaoShiMa.add(po.getDelicode());
         }
-        logger.info("Orders from database with BiaoZhiMa in last 24 hours: " + usedBiaoShiMa.size());
+        logger.info("Orders from database with BiaoZhiMa in last 72 hours: " + usedBiaoShiMa.size());
         logger.info(myServer + " Lottery scheduler: initialising done");
         
         BLOCKED_HOURS = generateBlockingHours();
