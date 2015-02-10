@@ -11,6 +11,7 @@ import java.util.Date;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository
+@RepositoryRestResource(path = ProdOrderSvcApi.PRODORDER_SVC_PATH)
 public interface ProdOrderRepository extends CrudRepository<ProdOrder, Long>{
 	
 	// Find all videos that are shorter than a specified duration
