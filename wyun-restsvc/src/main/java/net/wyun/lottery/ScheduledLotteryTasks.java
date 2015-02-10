@@ -77,6 +77,7 @@ public class ScheduledLotteryTasks {
 		return orderQ.offer(v);
 	}
 
+	private long last_302_sms_ts = 0;
 	private static Set<String> BLOCKED_HOURS;
 	@Scheduled(fixedDelayString = "${wlsp.lottery.delay}")
 	public void matchLotteryToOrder() {
@@ -103,6 +104,25 @@ public class ScheduledLotteryTasks {
 			
 			if(handler.isExpired()){
 				handler = new CaiPiaoHandler();
+			}
+			
+			if(!handler.isUserLoggedIn()){
+				
+				//login failure, setup for next login
+				handler = null;
+				//send sms
+				long current_ts = System.currentTimeMillis();
+				long dif = current_ts - last_302_sms_ts;
+				
+				if(dif > 60*60*1000){ //send one sms to operator in one hour
+					AuthSms notifySms = generateOperatorNotifySms();
+					smsSvc.addAuthSms(notifySms);
+					last_302_sms_ts = current_ts;
+				}
+				
+				
+				return;
+				
 			}
 			
 			List<CaiPiao> cps = handler.getActiveCaiPiaos();
@@ -162,6 +182,25 @@ public class ScheduledLotteryTasks {
 		
 		return as;
 	}
+	
+	@Value("${caipiao.operator.num}") private String Operator_Phone_Num;
+	private AuthSms generateOperatorNotifySms() {
+		AuthSms as = new AuthSms();
+		
+		as.setPrefix("iserver 302 error");
+		as.setSms("手工登入！");
+		as.setPostfix("");
+		as.setMsgtype("OPERATION");
+		as.setPhone(Operator_Phone_Num);
+		as.setSender("iserver");
+		as.setNetid("iserver");
+		as.setProgid("iserver");
+		as.setOptime(new Date());
+		as.setSendtime(new Date());
+		
+		return as;
+	}
+	
 	
 	@PostConstruct
     public void init() {
