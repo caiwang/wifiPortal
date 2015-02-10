@@ -72,7 +72,12 @@ public class CaiPiaoHandler {
 		logger.info("initialization, login...");
 		login();
 	}
+	
+	public boolean isUserLoggedIn(){
+		return isUserLoggedIn;
+	}
 
+	private boolean isUserLoggedIn = false;
 	private void login() throws Exception {
 		//1. Send a "GET" request, so that you can extract the form's data.
 		String page = getPageContent(CP_Url);
@@ -82,7 +87,8 @@ public class CaiPiaoHandler {
 
 		// 2. Construct above post's content and then send a POST request for
 		// authentication
-		sendPost(loginUrl, postParams);
+		isUserLoggedIn = sendLoginPost(loginUrl, postParams);
+		logger.info("login successfully? " + isUserLoggedIn);
 	}
 	
 	public List<CaiPiao> getActiveCaiPiaos() throws Exception
@@ -202,7 +208,7 @@ public class CaiPiaoHandler {
 	/**
 	 *  used in login to the cp.163.com
 	 */
-	private void sendPost(String url, String postParams) throws Exception {
+	private boolean sendLoginPost(String url, String postParams) throws Exception {
 
 		URL obj = new URL(url);
 		conn = (HttpsURLConnection) obj.openConnection();
@@ -239,7 +245,10 @@ public class CaiPiaoHandler {
 		logger.info("Sending 'POST' request to URL : " + url);
 		logger.info("Post parameters : " + postParams);
 		logger.info("Response Code : " + responseCode);
+		
+		return responseCode==HttpsURLConnection.HTTP_OK;
 
+		/*
 		BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 		String inputLine;
 		StringBuffer response = new StringBuffer();
@@ -248,6 +257,7 @@ public class CaiPiaoHandler {
 			response.append(inputLine);
 		}
 		in.close();
+		*/
 	}
 
 	private String getPageContent(String url) throws Exception {
