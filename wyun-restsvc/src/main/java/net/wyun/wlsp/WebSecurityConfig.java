@@ -23,6 +23,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private static final String[] UNSECURED_RESOURCE_LIST = new String[] { "/test.html", "/",
         "/resources/**", "/assets/**", "/css/**", "/webjars/**", "/images/**",
         "/dandelion-assets/**", "/unauthorized", "/error*", "/users*" };
+	
+	private static final String[] UNSECURED_REST_LIST = new String[] {"/actvst", "/authclient",
+		"/authmacip", "/authmac",
+		"/authsms", "/ihostloc", "/prodorder", "/useraccounts", "/useractive",
+		"/usermacs", "/wlact", "wlsta"};
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -31,7 +36,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .csrf().disable()
             .authorizeRequests()
-                .antMatchers("/prodorder", "/authsms").permitAll()
+                .antMatchers("/actvst", "/authclient", "/authmacip", "/authmac",
+                		"/authsms", "/ihostloc", "/prodorder/**", "/useraccounts", 
+                		"/useractive", "/usermacs", "/wlact", "wlsta")
+                .permitAll()
                 .antMatchers("/webjars/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
