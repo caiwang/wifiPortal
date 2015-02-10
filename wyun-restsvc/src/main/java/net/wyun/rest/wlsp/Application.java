@@ -85,6 +85,7 @@ public class Application extends RepositoryRestMvcConfiguration {
 	//
 	// See the ResourcesMapper class for more details.
 	
+	/*
 	@Override
 	public ObjectMapper halObjectMapper(){
 		ObjectMapper om = new ResourcesMapper();
@@ -94,6 +95,8 @@ public class Application extends RepositoryRestMvcConfiguration {
 	     om.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
 		return om;
 	}
+	
+	*/
 
 	/*
 	 * This part is for loading those css/js resource files from the fat war file
