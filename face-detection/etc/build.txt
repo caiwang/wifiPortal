@@ -1,0 +1,9 @@
+to build the project. You need manually add opencv-facedetection jar file
+to your local .m2 repository. (the project is in public repository)
+
+opencv-facedetection-1.0.0-SNAPSHOT.jar
+\net\wyun\rest\opencv-facedetection\1.0.0-SNAPSHOT
+
+##maven command line
+mvn install:install-file -Dfile=c:\opencv-facedetection-1.0.0-SNAPSHOT.jar -DgroupId=net.wyun.rest 
+-DartifactId=opencv-facedetection -Dversion={1.0.0-SNAPSHOT} -Dpackaging=jar
