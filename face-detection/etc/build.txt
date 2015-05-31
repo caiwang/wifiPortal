@@ -1,6 +1,8 @@
 to build the project. You need manually add opencv-facedetection jar file
 to your local .m2 repository. (the project is in public repository)
 
+https://github.com/michaelyin/FaceDetection
+
 opencv-facedetection-1.0.0-SNAPSHOT.jar
 \net\wyun\rest\opencv-facedetection\1.0.0-SNAPSHOT
 
