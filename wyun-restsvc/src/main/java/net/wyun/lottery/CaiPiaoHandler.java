@@ -307,6 +307,7 @@ public class CaiPiaoHandler {
 			response.append(inputLine);
 		}
 		in.close();
+		System.out.print(response.toString() + '\n');
 
 		// Get the response cookies
 		setCookies(conn.getHeaderFields().get("Set-Cookie"));
@@ -353,6 +354,9 @@ public class CaiPiaoHandler {
 
 	public void setCookies(List<String> cookies) {
 		this.cookies = cookies;
+		for(String c:cookies){
+			System.out.println(c);
+		}
 	}
 
 }
