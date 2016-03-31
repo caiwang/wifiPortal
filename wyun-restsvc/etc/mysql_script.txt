@@ -11,3 +11,6 @@ create table video(
   duration BIGINT(20),
   primary key(id)
 );
+
+### for more info., go to link:
+https://github.com/caiwang/iserver/blob/master/db.schema/wlsp.sys.base.sql
