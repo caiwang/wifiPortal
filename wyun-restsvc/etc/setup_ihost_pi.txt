@@ -1,0 +1,22 @@
+set up ihost for packet sniffing
+
+=============
+ https://github.com/unissoft-bj/ihost
+ https://github.com/caiwang/board2ihost/tree/pi
+ https://github.com/caiwang/board2ihost/blob/pi/pi2ihost
+ 
+ ============
+[10:48:54 PM] caiwangsky: ###common
+#mysql db: root’s password: rootatussp
+apt-get install -y mysql-server python-mysqldb  python-pexpect
+apt-get install -y apache2 apache2-doc apache2-utils dos2unix
+apt-get install -y libapache2-mod-php5 php5 php-pear php5-xcache
+apt-get install -y php5-fpm php-apc php5-mysql php5-curl  ##(for php call jboss REST service)
+apt-get install -y libgtk2.0-dev python-requests # curl client for python
+
+#for sniffer
+apt-get install -y tshark iw
+apt-get install -y libpcap-dev flex bison #winpcap only
+
+
+git clone https://github.com/unissoft-bj/ihost.git
