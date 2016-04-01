@@ -85,7 +85,7 @@ CREATE TABLE `authsms` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `srcid` BIGINT DEFAULT NULL,
   `prefix` varchar(60) DEFAULT '',
-  `sms` varchar(10) DEFAULT NULL,
+  `sms` varchar(60) DEFAULT NULL,
   `postfix` varchar(30) DEFAULT '',
   `mac` varchar(36) DEFAULT NULL,
   `ip` varchar(64) DEFAULT NULL,
