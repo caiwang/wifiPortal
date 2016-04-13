@@ -6,4 +6,6 @@
 9)  run 'chown -R sboot:sboot wlsp/'.
 4)  in /opt/wlsp, configure wyun_svc.sh to set the APP_HOME to /opt/wlsp
 11)  run 'chmod +x /opt/wlsp/wyun_svc.sh' to have it executable.
-12)  run 'update-rc.d sboot defaults' for wyun_svc run-level settings.
+12)  
+   a. sudo ln -sf /opt/wlsp/wyun_svc.sh /etc/init.d/wyun_svc
+   b. run 'update-rc.d wyun_svc defaults' for wyun_svc run-level settings.
